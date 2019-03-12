@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style> 
+
+body{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	cursor: move;
+}
+
+</style>
+
+<!-- Load d3.js -->
+<script src="http://d3js.org/d3.v4.js"></script>
+
+<body id="bdy">
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+<div id="mouse"></div>
+
+
+<script>
+
+// create the svg area
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", 1200)
+    .attr("height", 660)
+  .append("g")
+    .attr("transform", "translate(630,330)");
+
+
+svg.append('circle')
+   .attr('r', 300)
+   .attr('fill', 'lightgrey');
+
+svg.append('circle')
+   .attr('r', 240)
+   .attr('fill', '#848488')
+  .on("mouseout", mouseout);
+
+svg.append('circle')
+   .attr('r', 230)
+   .attr('fill', 'white');
+
+var pointer = svg.append('polyline')
+   .attr('points', "-8,0 0,-20 8,0")
+   .attr("transform", "translate(0,-240)")
+   .attr('fill', '#848488');
+
+tick_labels = ["(All)", "Unmarried", "Widowed", "Divorced", "Married", "Non-metro", "Metro", 
+               "Other", "US", ">=65", "45-64", "18-44", "<18", "Hisponic", "White", "African", "Asian", "Indian", "Male", "Female"];
+ticks = new Array();
+for (i = 0; i < 20; i++) {
+    ticks[i] = {'angle': 18 * i, 'label': tick_labels[i]};
+}
+
+
+
+
+svg.datum(ticks)
+   .append('g')
+   .selectAll("g")
+	.data(function(d) { return d;})
+	  .enter()
+          .append("g")
+	    .attr("transform", function(d) { return "rotate(" + (d.angle - 90) + ") translate(" + 240 + ",0)"; })
+	    .append("line")               // By default, x1 = y1 = y2 = 0, so no need to specify it.
+	    .attr("x2", 10)
+	    .attr("stroke", "black");
+
+
+svg.datum(ticks)
+   .append('g')
+   .selectAll("g")
+	.data(function(d) { return d;})
+	  .enter()
+          .append("g")
+	    .attr("transform", function(d) { return "rotate(" + (d.angle - 90) + ") translate(" + 260 + ",0)"; })
+	  .append("text")
+	    .attr("x", 8)
+	    .attr("dy", ".35em")
+	    //.attr("transform", function(d) { return d.angle > Math.PI ? "rotate(180) translate(-16)" : null; })
+		.attr("transform", function(d) { return "rotate(90) translate(-10)"; })
+	    .style("text-anchor", "middle")
+	    .text(function(d) { return d.label; })
+            .style("fill", "#474747")
+	    .style("font-size", 12);
+
+		
+dividers = [7, 79, 117, 153, 222, 315, 351]		
+svg.datum(dividers)
+   .append('g')
+   .selectAll("g")
+	.data(function(d) { return d;})
+	  .enter()
+          .append("g")
+	    .attr("transform", function(d) { return "rotate(" + (d - 90) + ") translate(" + 230 + ",0)"; })
+	    .append("line")               // By default, x1 = y1 = y2 = 0, so no need to specify it.
+	    .attr("x2", 70)
+	    .attr("stroke", "#676767");
+
+category_chars = [
+{'ch':'*', 'angle':0},
+
+{'ch':'S', 'angle':30},
+{'ch':'T', 'angle':36},
+{'ch':'A', 'angle':42},
+{'ch':'T', 'angle':48},
+{'ch':'U', 'angle':54},
+{'ch':'S', 'angle':60},
+
+{'ch':'L', 'angle':84},
+{'ch':'O', 'angle':88},
+{'ch':'C', 'angle':92},
+{'ch':'A', 'angle':96},
+{'ch':'T', 'angle':100},
+{'ch':'I', 'angle':104},
+{'ch':'O', 'angle':108},
+{'ch':'N', 'angle':113},
+
+{'ch':'B', 'angle':120},
+{'ch':'I', 'angle':122.5},
+{'ch':'R', 'angle':125},
+{'ch':'T', 'angle':128},
+{'ch':'H', 'angle':131},
+{'ch':'C', 'angle':134},
+{'ch':'O', 'angle':137},
+{'ch':'U', 'angle':140},
+{'ch':'N', 'angle':143},
+{'ch':'T', 'angle':145},
+{'ch':'R', 'angle':148},
+{'ch':'Y', 'angle':151},
+
+{'ch':'A', 'angle':184},
+{'ch':'G', 'angle':190},
+{'ch':'E', 'angle':196},
+
+{'ch':'R', 'angle':237},
+{'ch':'A', 'angle':242},
+{'ch':'C', 'angle':247},
+{'ch':'E', 'angle':252},
+{'ch':'&', 'angle':258},
+{'ch':'E', 'angle':265},
+{'ch':'T', 'angle':270},
+{'ch':'H', 'angle':275},
+{'ch':'N', 'angle':280},
+{'ch':'I', 'angle':284},
+{'ch':'C', 'angle':288},
+{'ch':'I', 'angle':292},
+{'ch':'T', 'angle':296},
+{'ch':'Y', 'angle':300},
+
+{'ch':'G', 'angle':322},
+{'ch':'E', 'angle':327},
+{'ch':'N', 'angle':331},
+{'ch':'D', 'angle':335},
+{'ch':'E', 'angle':339},
+{'ch':'R', 'angle':343}
+]
+
+svg.datum(category_chars)
+   .append('g')
+   .selectAll("g")
+	.data(function(d) { return d;})
+	  .enter()
+          .append("g")
+	    .attr("transform", function(d) { return "rotate(" + (d.angle - 90) + ") translate(" + 285 + ",0)"; })
+	  .append("text")
+	    .attr("x", 8)
+	    .attr("dy", ".35em")
+	    //.attr("transform", function(d) { return d.angle > Math.PI ? "rotate(180) translate(-16)" : null; })
+		.attr("transform", function(d) { return "rotate(90) translate(-10)"; })
+	    .style("text-anchor", "middle")
+	    .text(function(d) { return d.ch; })
+            .style("fill", "#676767")
+	    .style("font-size", 16);		
+		
+// create a matrix
+var matrix = [
+[2,0,0,1,0,0,1,0,1,1,0,1,0,1,1,1,0,1,0,0],
+[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0],
+[0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,1,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+[1,0,0,1,0,0,4,0,0,1,0,1,0,1,1,1,0,1,0,0],
+[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0],
+[0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0],
+[0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0],
+[0,0,2,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0],
+[1,0,0,1,0,0,1,0,1,1,0,9,0,0,1,1,0,1,1,0],
+[1,0,0,1,0,0,1,0,1,1,0,1,0,1,0,1,0,1,1,0],
+[1,0,0,1,0,0,1,0,1,1,0,1,0,7,1,0,0,1,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+[0,0,1,1,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0],
+[0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0],
+[0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]
+];
+
+cat_colors = ["#1BA602", "#4A43FF", "#FF7900"];
+
+objectives = [{"name":"A1", "color":"#9ACD32", "category": 0},
+{"name":"A2", "color":"#377DB8", "category": 0},
+{"name":"A3", "color":"#F5DEB3", "category": 0},
+{"name":"A4", "color":"#EE82EE", "category": 0},
+{"name":"A5", "color":"#40E0D0", "category": 0},
+{"name":"A6", "color":"#FF6347", "category": 0},
+{"name":"B1", "color":"#D8BFD8", "category": 1},
+{"name":"B2", "color":"#D2B48C", "category": 1},
+{"name":"B3", "color":"#4682B4", "category": 1},
+{"name":"B4", "color":"#00FF7F", "category": 1},
+{"name":"B5", "color":"#FFFAFA", "category": 1},
+{"name":"B6", "color":"#708090", "category": 1},
+{"name":"B7", "color":"#708090", "category": 1},
+{"name":"C1", "color":"#6A5ACD", "category": 2},
+{"name":"C2", "color":"#87CEEB", "category": 2},
+{"name":"C3", "color":"#A0522D", "category": 2},
+{"name":"C4", "color":"#FFF5EE", "category": 2},
+{"name":"C5", "color":"#2E8B57", "category": 2},
+{"name":"C6", "color":"#F4A460", "category": 2},
+{"name":"C7", "color":"#FA8072", "category": 2}];
+
+
+	// give this matrix to d3.chord(): it will calculates all the info we need to draw arc and ribbon
+	var res = d3.chord()
+	    .padAngle(0.02)
+	    .sortSubgroups(d3.descending)
+	    (matrix)
+
+	// add the groups on the outer part of the circle
+	var arc_grp = svg
+	  .datum(res)
+	  .append("g")
+	  .selectAll("g")
+	  .data(function(d) { return d.groups; })
+	  .enter()
+
+          var grp_path = arc_grp
+	  .append("path")
+          //.on("mouseover", mouseover_arc)
+            //.on("mouseout", mouseout)
+	    .style("fill", function(d,i){ return cat_colors[objectives[i].category]; })
+	    //.style("stroke", "black")
+	    .attr("d", d3.arc()
+	      .innerRadius(200)
+	      .outerRadius(230)
+	    );
+
+           arc_grp
+           .append("g")
+           .attr("transform", function(d) { return "rotate(" + (d.startAngle * 90 / Math.PI + d.endAngle * 90 / Math.PI - 90) + ") translate(" + 210 + ",0)"; })
+           .append("text")
+           .attr("x", 8)
+	    .attr("dy", ".15em")            
+	    .text(function(d,i) {
+		if((d.endAngle-d.startAngle)*210-12>objectives[i].name.length*6) 
+			return objectives[i].name; 
+		else 
+			return ""; 
+		})
+            .style("fill", "#efefef")
+            .attr("transform", function(d) { return "rotate(90) translate(-10)"; })
+            .style("text-anchor", "middle")
+	    .style("font-size", 13);
+
+           /*var grp_txt = arc_grp
+           .append("text")
+           //.attr("transform", function(d) { return "rotate(" + (d.startAngle * 90 / Math.PI + d.endAngle * 90 / Math.PI - 90) + ") translate(" + 210 + ",0)"; })
+           .attr("x", 8)
+	    .attr("dy", ".15em");
+
+	   grp_txt.append("textPath")
+	  .attr("xlink:href", function(d, i) { return "#group" + i; })
+	  .text(function(d, i) {;return objectives[i].name; });
+
+	// Remove the labels that don't fit. :(
+	grp_txt.filter(function(d, i) { alert(JSON.stringify(grp_path)); return grp_path[0][i].getTotalLength() / 2 - 16 < this.getComputedTextLength(); })*/
+
+	// Add the links between groups
+	svg
+	  .datum(res)
+	  .append("g")
+	  .selectAll("path")
+	  .data(function(d) { return d; })
+	  .enter()
+	  .append("path")
+            .attr("class", "chord")
+	    .attr("source", function(d){return d.source.index;})
+            .attr("target", function(d){return d.target.index;})
+	    .attr("d", d3.ribbon()
+	      .radius(200)
+	    )
+	    .style("fill", function(d){ return(cat_colors[objectives[d.source.index].category]) })
+            .style("opacity", 0.5)
+            .on("mouseover", mouseover_chord);
+            //.on("mouseout", mouseout);
+            // colors depend on the source group. Change to target otherwise.
+
+
+
+// Returns an array of tick angles and values for a given group and step.
+function groupTicks(d, step) {
+  var k = (d.endAngle - d.startAngle) / d.value;
+  return d3.range(0, d.value, step).map(function(value) {
+    return {value: value, angle: value * k + d.startAngle};
+  });
+}
+
+function mouseover_arc(d, i) {
+
+   //Decrease opacity to all
+    svg.selectAll("path.chord")
+      .transition()
+      .style("opacity", 0.1);
+    //Show hovered over chord with full opacity
+     svg.selectAll("path.chord[source='" + i + "']")
+      .transition()
+      .style("opacity", 0.5);
+     svg.selectAll("path.chord[target='" + i + "']")
+      .transition()
+      .style("opacity", 0.5);
+}
+
+function mouseover_chord(d, i) {
+
+   //Decrease opacity to all
+    svg.selectAll("path.chord")
+      .transition()
+      .style("opacity", 0.1);
+    //Show hovered over chord with full opacity
+     svg.selectAll("path.chord[source='" + d.source.index + "']")
+      .transition()
+      .style("opacity", 0.5);
+     svg.selectAll("path.chord[target='" + d.source.index + "']")
+      .transition()
+      .style("opacity", 0.5);
+}
+
+function mouseout(d, i) {
+
+   //Decrease opacity to all
+    svg.selectAll("path.chord")
+      .transition()
+      .style("opacity", 0.5);
+}
+
+var centerX = 630;
+var centerY = 330;
+document.getElementById("bdy").addEventListener('mousedown', startDrag);
+document.getElementById("bdy").addEventListener('mousemove', drag);
+document.getElementById("bdy").addEventListener('mouseup', endDrag);
+document.getElementById("bdy").addEventListener('mouseleave', endDrag);
+
+var curTick = 0;
+var dragging = false;
+
+function startDrag(e) {
+	dragX = e.clientX;
+	dragY = e.clientY;
+		
+	ang = ticks[curTick].angle;
+	
+    py = centerY - 240 * Math.cos(ang*Math.PI/180);
+	px = centerX + 240 * Math.sin(ang*Math.PI/180);
+	
+	
+	distance = Math.sqrt((dragX-px)*(dragX-px)+(dragY-py)*(dragY-py));
+	if(distance > 100)
+		return;
+	
+	distance = Math.sqrt((dragX-centerX)*(dragX-centerX)+(dragY-centerY)*(dragY-centerY));
+	if(distance <240)
+		return;
+	
+	dragging = true;
+}
+
+
+
+function drag(e) {
+
+	
+
+	
+
+	if(dragging){
+		var dragX = e.clientX;
+		var dragY = e.clientY;
+        var diffX = dragX-centerX;
+        var diffY = dragY-centerY;
+		var distance = Math.sqrt(diffX*diffX + diffY*diffY);
+		
+		if(distance >= 240){
+				var tarang = 90;
+				if(diffY != 0)
+					tarang = Math.atan(Math.abs(diffX/diffY)) * 180 / Math.PI ;
+				if(diffX>0 && diffY>0)
+					tarang = 180 - tarang;
+				else if(diffY>0 && diffX<0)
+					tarang = 180 + tarang;
+				else if(diffY<0 && diffX<0)
+					tarang = 360 - tarang;
+				else if(diffX==0 && diffY>0)
+					tarang = 180;
+				else if(diffY==0 && diffX <0)
+					tarang = 270;
+					
+				tk = nearest_tick(tarang, curTick);
+				document.getElementById("mouse").innerHTML = "(" + tk + ")";
+
+				if(tk != curTick){
+					curTick = tk;
+					ang = ticks[tk].angle;
+					ppy = - 240 * Math.cos(ang*Math.PI/180);
+					ppx = 240 * Math.sin(ang*Math.PI/180);		
+					pointer.transition().attr("transform", "translate(" + (ppx) + "," + (ppy) + ") rotate(" + ang + ")");
+				}			
+		
+		}
+
+	}
+}
+
+function endDrag(e) {
+    dragging = false;
+}
+
+function nearest_tick(ang, cur_tick){
+
+        /*diff1 = Math.abs(ticks[cur_tick].angle-ang);
+	diff2 = Math.abs(ticks[Math.min(cur_tick+1, 19)].angle-ang);
+	diff3 = Math.abs(ticks[Math.max(cur_tick-1, 0)].angle-ang);
+
+        if( (diff1<=diff2) && (diff1<=diff3) )
+		return cur_tick;
+        if( (diff2<diff1) && (diff2<=diff3) )
+		return Math.min(cur_tick+1, 19); 
+
+	return Math.max(cur_tick-1, 0);*/
+
+	if(ang>=355)
+		return 0;
+	for(i=0; i<20; i++)
+		if(Math.abs(ticks[i].angle-ang)<=5)
+			return i;
+	return cur_tick;
+}
+
+</script>
+
+</body>
