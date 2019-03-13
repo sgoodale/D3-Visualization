@@ -3,19 +3,24 @@
 import pandas as pd
 import numpy as np
 
-patients = pd.read_csv("Patient_Characteristics_Survey_PCS_2015.csv")
+raw_data = pd.read_csv("Patient_Characteristics_Survey_PCS_2015.csv")
 
 print("Number of instances and columns before preprocessing data:")
-print(patients.shape)
+print(raw_data.shape)
 
 #Replace "UNKNOWN" values with NaN
-patients = patients.replace("UNKNOWN", np.nan)
+raw_data = raw_data.replace("UNKNOWN", np.nan)
 
 #Drop all rows that have NaN values in at least one cell
-patients = patients.dropna()
+raw_data = raw_data.dropna()
 
-print("Number of instances and columns after processing:")
-print(patients.shape)
+#Condense data to only include the following attributes
+raw_data = raw_data[['Mental Illness','Alcohol Related Disorder','Drug Substance Disorder',
+					'High Blood Pressure','Diabetes','Obesity','Heart Attack','Stroke',
+					'Pulmonary Asthma','Kidney Disease','Liver Disease','Cancer']]
+
+#print("Number of instances and columns after processing:")
+print(raw_data.shape)
 
 #Transfer data to new CSV
-patients.to_csv('Patient_Characteristics_Nulls_Dropped.csv', index=False)
+raw_data.to_csv('parsed_data.csv', index=False)
