@@ -35,3 +35,4 @@ print("\n")
 #Get resulting correlation matrix:
 result = raw_data.corr()
 print("The resulting correlation matrix is: \n")
+print(result)
