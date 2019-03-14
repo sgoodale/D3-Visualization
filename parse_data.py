@@ -4,7 +4,7 @@ import numpy as np
 #Read in original data file.
 raw_data = pd.read_csv("Patient_Characteristics_Survey_PCS_2015.csv")
 
-print("Number of instances and columns before preprocessing data:")
+print("\nNumber of instances and columns before preprocessing data:\n")
 print(raw_data.shape)
 
 #Replace "UNKNOWN" values with NaN.
@@ -21,18 +21,19 @@ raw_data = raw_data[['Mental Illness','Alcohol Related Disorder','Drug Substance
 					'High Blood Pressure','Diabetes','Obesity','Heart Attack','Stroke',
 					'Pulmonary Asthma','Kidney Disease','Liver Disease','Cancer']]
 
-#Transfer data to new CSV
-raw_data.to_csv('parsed_data.csv', index=False)
-
 #Replace categorical cells with 1s and 0s.
 raw_data = raw_data.replace("NO", 0.0)
 raw_data = raw_data.replace("YES", 1.0)
 
-print("Number of instances and columns after processing:")
+print("\nNumber of instances and columns after processing:\n")
 print(raw_data.shape)
-print("\n")
 
 #Get resulting correlation matrix:
 result = raw_data.corr()
-print("The resulting correlation matrix is: \n")
-print(result)
+print("\nCorrelation Matrix has now been generated.\n")
+
+#Transfer data to new CSV
+raw_data.to_csv('parsed_data.csv', index=False)
+
+#Transfer correlation matrix to new CSV
+result.to_csv('correlation_matrix.csv', index=False)
