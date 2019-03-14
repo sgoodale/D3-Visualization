@@ -10,8 +10,8 @@ print(raw_data.shape)
 #Replace "UNKNOWN" values with NaN.
 raw_data = raw_data.replace("UNKNOWN", np.nan)
 
-#Only consider Mental Illness = YES --> Replace all instances of Mental Illness = NO so they can be dropped from the data.
-#raw_data['Mental Illness'] = raw_data['Mental Illness'].replace("NO", np.nan)
+#Randomize data
+raw_data.reindex(np.random.permutation(raw_data.index))
 
 #Drop all rows that have NaN values in at least one cell.
 raw_data = raw_data.dropna()
