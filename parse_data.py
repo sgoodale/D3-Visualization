@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 import csv
+import matplotlib.pyplot as plt
 
 #Read in original data file.
 raw_data = pd.read_csv("Patient_Characteristics_Survey_PCS_2015.csv")
@@ -39,21 +40,37 @@ print("\nCorrelation Matrix has now been generated.\n")
 raw_data.to_csv('parsed_data.csv', index=False)
 
 #Transfer data to new JSON file
-csvfile = open('parsed_data.csv', 'r')
-jsonfile = open('parsed_data.json', 'w')
-fieldnames = ('Mental Illness','Alcohol Related Disorder','Drug Substance Disorder',
-			'High Blood Pressure','Diabetes','Obesity','Heart Attack','Stroke',
-			'Pulmonary Asthma','Kidney Disease','Liver Disease','Cancer')
+#csvfile = open('parsed_data.csv', 'r')
+#jsonfile = open('parsed_data.json', 'w')
+#fieldnames = ('Mental Illness','Alcohol Related Disorder','Drug Substance Disorder',
+#			'High Blood Pressure','Diabetes','Obesity','Heart Attack','Stroke',
+#			'Pulmonary Asthma','Kidney Disease','Liver Disease','Cancer')
 
 #Create csv reader and skip header row.
-reader = csv.DictReader(csvfile, fieldnames)
-next(reader)
+#reader = csv.DictReader(csvfile, fieldnames)
+#next(reader)
 
-for row in reader:
-	json.dump(row, jsonfile)
-	jsonfile.write('\n')
-print("\nJSON file has now been generated.\n")
+#for row in reader:
+#	json.dump(row, jsonfile)
+#	jsonfile.write('\n')
+#print("\nJSON file has now been generated.\n")
 
 #Transfer correlation matrix to new CSV
 corr_matrix.to_csv('correlation_matrix.csv', index=False)
 result.to_csv('correlation_matrix.csv', index=False)
+
+#Re-label x and y axis for heat map
+
+labels = ('Mental Illness','Alcohol Related Disorder','Drug Substance Disorder',
+			'High Blood Pressure','Diabetes','Obesity','Heart Attack','Stroke',
+			'Pulmonary Asthma','Kidney Disease','Liver Disease','Cancer')
+
+label_position = np.arange(len(labels))		
+
+plt.yticks(label_position, labels)
+plt.xticks(label_position, labels)
+plt.xticks(rotation=90)
+
+#plot correlation matrix as heat map
+plt.imshow(corr_matrix, cmap='hot', interpolation='nearest')
+plt.show()
