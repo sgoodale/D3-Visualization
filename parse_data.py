@@ -12,6 +12,8 @@ print(raw_data.shape)
 
 #Replace "UNKNOWN" values with NaN.
 raw_data = raw_data.replace("UNKNOWN", np.nan)
+#Only consider instances with Mental Illness = YES
+#raw_data['Mental Illness'] = raw_data['Mental Illness'].replace("YES", np.nan)
 
 #Randomize data
 raw_data.reindex(np.random.permutation(raw_data.index))
