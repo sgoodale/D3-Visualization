@@ -29,11 +29,11 @@ print("\nNumber of instances and columns after processing:\n")
 print(raw_data.shape)
 
 #Get resulting correlation matrix:
-result = raw_data.corr()
+corr_matrix = raw_data.corr()
 print("\nCorrelation Matrix has now been generated.\n")
 
 #Transfer data to new CSV
 raw_data.to_csv('parsed_data.csv', index=False)
 
 #Transfer correlation matrix to new CSV
-result.to_csv('correlation_matrix.csv', index=False)
+corr_matrix.to_csv('correlation_matrix.csv', index=False)
