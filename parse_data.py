@@ -12,14 +12,20 @@ print(raw_data.shape)
 
 #Replace "UNKNOWN" values with NaN.
 raw_data = raw_data.replace("UNKNOWN", np.nan)
-#Only consider instances with Mental Illness = YES
-#raw_data['Mental Illness'] = raw_data['Mental Illness'].replace("YES", np.nan)
 
 #Randomize data
 raw_data.reindex(np.random.permutation(raw_data.index))
 
+#Replace val OTHER in column 'Race' with Hispanic if applicable
+for index, row in raw_data.iterrows():
+	if raw_data.at[index, 'Hispanic Ethnicity'] == 'YES':
+		raw_data.at[index, 'Race'] = 'HISPANIC'
+
 #Drop all rows that have NaN values in at least one cell.
 raw_data = raw_data.dropna()
+
+#Transfer data to new CSV
+raw_data.to_csv('refactored_data.csv', index=False)
 
 #Condense data to only include the following attributes:
 raw_data = raw_data[['Mental Illness','Alcohol Related Disorder','Drug Substance Disorder',
@@ -33,36 +39,19 @@ raw_data = raw_data.replace("YES", 1.0)
 print("\nNumber of instances and columns after processing:\n")
 print(raw_data.shape)
 
+#Transfer data to new CSV
+raw_data.to_csv('parsed_data.csv', index=False)
+
 #Get resulting correlation matrix:
 corr_matrix = raw_data.corr()
 result = raw_data.corr()
 print("\nCorrelation Matrix has now been generated.\n")
 
-#Transfer data to new CSV
-raw_data.to_csv('parsed_data.csv', index=False)
-
-#Transfer data to new JSON file
-#csvfile = open('parsed_data.csv', 'r')
-#jsonfile = open('parsed_data.json', 'w')
-#fieldnames = ('Mental Illness','Alcohol Related Disorder','Drug Substance Disorder',
-#			'High Blood Pressure','Diabetes','Obesity','Heart Attack','Stroke',
-#			'Pulmonary Asthma','Kidney Disease','Liver Disease','Cancer')
-
-#Create csv reader and skip header row.
-#reader = csv.DictReader(csvfile, fieldnames)
-#next(reader)
-
-#for row in reader:
-#	json.dump(row, jsonfile)
-#	jsonfile.write('\n')
-#print("\nJSON file has now been generated.\n")
-
 #Transfer correlation matrix to new CSV
 corr_matrix.to_csv('correlation_matrix.csv', index=False)
 result.to_csv('correlation_matrix.csv', index=False)
 
-#Re-label x and y axis for heat map
-
+#Re-label x and y axis before creating heat map
 labels = ('Mental Illness','Alcohol Related Disorder','Drug Substance Disorder',
 			'High Blood Pressure','Diabetes','Obesity','Heart Attack','Stroke',
 			'Pulmonary Asthma','Kidney Disease','Liver Disease','Cancer')
