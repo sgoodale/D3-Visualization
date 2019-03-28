@@ -417,7 +417,7 @@ return Math.max(cur_tick-1, 0);*/
   if(ang>=355)
     return 0;
   for(i=0; i<20; i++)
-    if(Math.abs(ticks[i].angle-ang)<=5)
+    if(ticks[i] && Math.abs(ticks[i].angle-ang)<=5)
       return i;
   return cur_tick;
 }
