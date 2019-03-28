@@ -51,9 +51,6 @@ for (i = 0; i < 18; i++) {
   ticks[i] = {'angle': 20 * i, 'label': tick_labels[i]};
 }
 
-
-
-
 svg.datum(ticks)
     .append('g')
     .selectAll("g")
@@ -299,8 +296,6 @@ function mouseout_panel(d, i) {
       .style("opacity", 0.5);
 }
 
-
-
 var centerX = 630;
 var centerY = 330;
 
@@ -309,8 +304,8 @@ centerX = rect.x + rect.width/2;
 centerY = rect.y + rect.height/2;
 
 var body = document.getElementsByTagName("body")[0];
-body.addEventListener('mousedown', startDrag);
 body.addEventListener('mousemove', drag);
+body.addEventListener('mousedown', startDrag);
 body.addEventListener('mouseup', endDrag);
 body.addEventListener('mouseleave', endDrag);
 
@@ -359,7 +354,7 @@ function drag(e) {
     var diffY = dragY-centerY;
     var distance = Math.sqrt(diffX*diffX + diffY*diffY);
 
-    if(distance >= 240){
+    if(distance >= 240 || distance < 240){
       var tarang = 90;
       if(diffY != 0)
         tarang = Math.atan(Math.abs(diffX/diffY)) * 180 / Math.PI ;
@@ -390,7 +385,8 @@ function drag(e) {
 }
 
 function endDrag(e) {
-  if(dragging && (oldTick != curTick) ){
+  //if(dragging && (oldTick != curTick)) {
+  while(dragging && (oldTick != curTick) ){
     var element = document.getElementById("g_arc");
     element.parentNode.removeChild(element);
     element = document.getElementById("g_chord");
@@ -400,6 +396,7 @@ function endDrag(e) {
   }
 
   dragging = false;
+
 }
 
 function nearest_tick(ang, cur_tick){
