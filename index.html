@@ -1,5 +1,121 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<svg id="svg" font-family="sans-serif" font-size="10"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="d3-visualization.js"></script>
+<html lang="en">
+<head>
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>CARE (Group 10)</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+    <!-- Javascript
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    
+</head>
+<body>
+    <img src="images/hero.png" alt="" width="100%">
+    <div class="overlay">
+        <h1><i class="logo"></i>C.A.R.E</h1>
+    </div>
+
+    <div class="container">
+        
+        <div class="row">
+            <div class="twelve columns" style="margin-top: 5%;">
+                <h1 id="mainidea">Our Idea</h1>
+                <p>
+                    “The focus of CARE is to visualize the intersection of mental and physical health issues as they related to various societal groups.”
+                </p>
+            </div>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="twelve columns">
+                <h1 id="vis">Visualization</h1>
+            </div>
+        </div>        
+                
+        <div class="main">
+            <div id="my_dataviz" class="dataviz"></div>
+                <div class="legend">
+                    <div class="legend-entry">
+                        <div class="box" style="background-color:#4B9BFF"></div>
+                            <h5>Medical Disease</h5>
+                        </div>
+                        <div class="legend-entry">
+                            <div class="box" style="background-color:#FFB46E"></div>
+                            <h5>Substance Abuse</h5>
+                        </div>
+                        <div class="legend-entry">
+                            <div class="box" style="background-color:#FF5F5F"></div>
+                            <h5>Mental Disorder</h5>
+                        </div>
+                </div>
+        </div>
+        <hr>
+
+        <div id="tooltip"></div>   
+        
+        <div class="row">
+                 <div class="seven columns">
+                <h1 id="data">Data</h1>
+                <h5>New York State Office of Mental Health</h5>
+                <p>
+                    2015 Patient Characteristics Survey
+                </p>
+            </div>
+            <div class="four columns">
+                <a target="_blank" href="https://catalog.data.gov/dataset/patient-characteristics-survey-pcs-2015"><img class="screenshot" src="images/nymh.png">
+            </div>
+            <div class="one column">
+                &nbsp;
+            </div>
+        </div> 
+        <hr>
+        
+        <div class="row">
+            <div class="twelve columns">
+                <h1 id="contributors">Contributors</h1>
+                <b>Adam Harris</b> (V00766855)
+                <br>
+                <b>Charlie Zhang</b> (V00890485)
+                <br>
+                <b>Chelsea Dinh</b> (V00803966)
+                <br>
+                <b>Stephanie Goodale</b> (V00832053)
+                <br>
+                <b>Tristan Douville</b> (V00820003)
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    </div>
+    <div>
+        <img src="images/footer.png" alt="" width="100%">
+        <a href="."><h6>Copyright © 2019 C.A.R.E. All rights reserved.</h6>
+    </div>
+    
+    <script src="js/chord.js"></script>
+
+    <!-- End Document
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
