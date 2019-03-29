@@ -299,9 +299,6 @@ function mouseout_panel(d, i) {
 var centerX = 630;
 var centerY = 330;
 
-rect = document.getElementById("my_dataviz").getBoundingClientRect();
-centerX = rect.x + rect.width/2;
-centerY = rect.y + rect.height/2;
 
 var body = document.getElementsByTagName("body")[0];
 body.addEventListener('mousemove', drag);
@@ -317,6 +314,11 @@ var cursorX;
 var cursorY;
 
 function startDrag(e) {
+
+  rect = document.getElementById("my_dataviz").getBoundingClientRect();
+  centerX = rect.x + rect.width/2;
+  centerY = rect.y + rect.height/2;
+	
   dragX = e.clientX;
   dragY = e.clientY;
 
