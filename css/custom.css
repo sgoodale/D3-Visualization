@@ -77,7 +77,7 @@ section {
   grid-column-end: 4;
 }
 
-.dataviz:hover {
+.main:hover {
   cursor: move;
 }
 
